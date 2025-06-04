@@ -1,0 +1,52 @@
+// Estructura base del proyecto React (Vite) + Firebase
+// Archivo: main.jsx
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './App';
+import './index.css';
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
+
+// Archivo: App.jsx
+import { useState } from 'react';
+import Welcome from './screens/Welcome';
+import Questionnaire from './screens/Questionnaire';
+import Results from './screens/Results';
+
+function App() {
+  const [step, setStep] = useState(0);
+  const [answers, setAnswers] = useState({});
+  const [result, setResult] = useState(null);
+
+  return (
+    <div className="min-h-screen bg-gray-50 text-gray-800 p-4">
+      {step === 0 && <Welcome onStart={() => setStep(1)} />}
+      {step === 1 && <Questionnaire onComplete={(ans) => { setAnswers(ans); setStep(2); }} />}
+      {step === 2 && <Results answers={answers} onBack={() => setStep(1)} />}
+    </div>
+  );
+}
+
+export default App;
+
+// Archivo: firebase-config.js
+import { initializeApp } from 'firebase/app';
+import { getFirestore } from 'firebase/firestore';
+import { getAuth } from 'firebase/auth';
+
+const firebaseConfig = {
+  apiKey: "TU_API_KEY",
+  authDomain: "TU_DOMINIO.firebaseapp.com",
+  projectId: "TU_PROJECT_ID",
+  storageBucket: "TU_PROJECT_ID.appspot.com",
+  messagingSenderId: "ID",
+  appId: "APP_ID"
+};
+
+const app = initializeApp(firebaseConfig);
+export const db = getFirestore(app);
+export const auth = getAuth(app);
